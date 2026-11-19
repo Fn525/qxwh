@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>侨乡拾遗 · 江门非遗文化</title>
+  <style>
+    :root {
+      --kuye: #C8A96E;
+      --qingzhuan: #4A4A4A;
+      --dailan: #2C3E50;
+      --nuanbai: #FAF7F0;
+      --shense: #3E3A33;
+      --qianse: #8C8478;
+      --bian: #E4DDD0;
+      --card: #FFFFFF;
+      --shadow: 0 4px 12px rgba(62,58,51,0.06), 0 16px 40px rgba(62,58,51,0.04);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    
+    /* === 核心修改：背景图全屏覆盖，20%透明度效果 === */
+    body {
+      font-family: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", "STSong", serif;
+      color: var(--shense);
+      line-height: 1.85;
+      font-size: 15.5px;
+      -webkit-font-smoothing: antialiased;
+      
+      background-color: #F7F4EB; /* 底色 */
+      background-image: 
+        /* 保留一点原有的金色晕染，增加层次 */
+        radial-gradient(circle at 10% 20%, rgba(200,169,110,0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(200,169,110,0.05) 0%, transparent 45%),
+        /* 80%不透明度的遮罩，实现图片20%透明度效果 */
+        linear-gradient(rgba(247, 244, 235, 0.8), rgba(247, 244, 235, 0.8)),
+        /* 你的本地图片 */
+        url('images/fengmian.jpg');
+      background-size: auto, auto, cover, cover;
+      background-position: center center;
+      background-attachment: fixed; /* 背景固定，滚动时铺满全屏 */
+    }
+    ::selection { background: var(--kuye); color: #fff; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { font-family: inherit; cursor: pointer; }
+
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,247,240,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--bian);
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 14px 28px;
+      display: flex; align-items: center; gap: 24px;
+    }
+    .brand { display: flex; flex-direction: column; line-height: 1.2; flex-shrink: 0; }
+    .brand-name { font-size: 20px; letter-spacing: 0.18em; font-weight: 600; color: var(--dailan); }
+    .brand-sub { font-size: 10px; letter-spacing: 0.32em; color: var(--qianse); margin-top: 3px; }
+
+    .nav { display: flex; gap: 4px; flex-wrap: wrap; margin-left: 12px; }
+    .nav button {
+      background: none; border: none; padding: 6px 10px;
+      font-size: 13.5px; color: var(--qingzhuan); letter-spacing: 0.06em;
+      border-bottom: 2px solid transparent;
+      transition: 0.2s;
+    }
+    .nav button:hover { color: var(--dailan); }
+    .nav button.active { color: var(--dailan); border-bottom-color: var(--kuye); font-weight: 600; }
+
+    .search-wrap { margin-left: auto; position: relative; flex-shrink: 0; }
+    .search-wrap input {
+      width: 210px; padding: 7px 12px 7px 32px;
+      border: 1px solid var(--bian); border-radius: 2px;
+      background: #fff; font-size: 13px; font-family: inherit;
+      color: var(--shense); outline: none; transition: 0.2s;
+    }
+    .search-wrap input:focus { border-color: var(--kuye); width: 260px; }
+    .search-wrap::before {
+      content: "⌕"; position: absolute; left: 10px; top: 50%;
+      transform: translateY(-50%); color: var(--qianse); font-size: 16px;
+      pointer-events: none;
+    }
+    .hot-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; justify-content: flex-end; }
+    .hot-tags span {
+      font-size: 10.5px; color: var(--qianse); cursor: pointer;
+      padding: 1px 7px; border: 1px solid var(--bian); border-radius: 20px;
+      transition: 0.2s; background: rgba(255,255,255,0.6);
+    }
+    .hot-tags span:hover { border-color: var(--kuye); color: var(--dailan); }
+
+    .main { max-width: 1200px; margin: 0 auto; padding: 0 28px 100px; position: relative; z-index: 2; }
+    .view { display: none; animation: fade 0.35s ease; }
+    .view.active { display: block; }
+    @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    /* === 首页首屏（背景已移除，完全透明透出 body 的背景） === */
+    .hero {
+      padding: 120px 0 100px; text-align: center; position: relative;
+    }
+    .hero-quote {
+      font-size: clamp(24px, 3.6vw, 38px); letter-spacing: 0.14em;
+      line-height: 1.9; color: var(--dailan); position: relative; z-index: 2;
+      font-weight: 600;
+    }
+    .hero-quote em { font-style: normal; color: var(--kuye); }
+    .hero-sub {
+      margin-top: 22px; font-size: 13.5px; color: var(--qingzhuan);
+      letter-spacing: 0.2em; position: relative; z-index: 2;
+    }
+    .hero-line { width: 44px; height: 2px; background: var(--kuye); margin: 30px auto 0; position: relative; z-index: 2; }
+
+    .entry-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 32px; }
+    .entry-card {
+      background: rgba(255,255,255,0.85); border: 1px solid var(--bian);
+      padding: 28px 22px 24px; cursor: pointer; transition: 0.25s; 
+      backdrop-filter: blur(8px); border-radius: 4px;
+    }
+    .entry-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--kuye); background: #fff; }
+    .entry-card .ec-mark { font-size: 26px; color: var(--kuye); margin-bottom: 14px; opacity: 0.9; }
+    .entry-card h3 { font-size: 17px; letter-spacing: 0.08em; font-weight: 600; margin-bottom: 8px; color: var(--dailan); }
+    .entry-card p { font-size: 12.5px; color: var(--qianse); line-height: 1.8; }
+
+    .home-note {
+      margin-top: 64px; padding: 32px 36px;
+      border-left: 3px solid var(--kuye); background: rgba(255,255,255,0.75);
+      font-size: 13.5px; color: var(--qingzhuan); line-height: 2; backdrop-filter: blur(8px);
+      border-radius: 0 4px 4px 0;
+    }
+    .home-note strong { color: var(--dailan); font-weight: 600; }
+
+    .section-head { padding: 56px 0 12px; }
+    .section-head .sh-label { font-size: 10.5px; letter-spacing: 0.3em; color: var(--kuye); text-transform: uppercase; margin-bottom: 10px; }
+    .section-head h2 { font-size: 26px; letter-spacing: 0.1em; font-weight: 600; margin-bottom: 10px; color: var(--dailan); }
+    .section-head p { font-size: 13.5px; color: var(--qingzhuan); max-width: 640px; line-height: 1.9; }
+
+    .item-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; margin-top: 28px; }
+    .item-card { background: var(--card); border: 1px solid var(--bian); transition: 0.2s; overflow: hidden; border-radius: 4px; }
+    .item-card:hover { border-color: var(--kuye); box-shadow: var(--shadow); transform: translateY(-2px); }
+    .ic-img { width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: #EDE8DE; }
+    .ic-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .item-card:hover .ic-img img { transform: scale(1.04); }
+    
+    .ic-body { padding: 24px 26px 26px; }
+    .ic-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+    .ic-tag { font-size: 10px; letter-spacing: 0.1em; padding: 2px 9px; border: 1px solid var(--bian); color: var(--qianse); border-radius: 20px; }
+    .ic-tag.level { border-color: var(--kuye); color: var(--kuye); background: rgba(200,169,110,0.1); }
+    .item-card h3 { font-size: 19px; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 10px; color: var(--dailan); }
+    .item-card .ic-desc { font-size: 13.5px; color: var(--qingzhuan); line-height: 1.95; }
+    .steps { margin-top: 16px; border-top: 1px dashed var(--bian); padding-top: 14px; }
+    .steps-title { font-size: 11px; letter-spacing: 0.16em; color: var(--kuye); margin-bottom: 10px; }
+    .step-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .step-list span { font-size: 11.5px; padding: 3px 10px; background: var(--nuanbai); border: 1px solid var(--bian); color: var(--qingzhuan); border-radius: 2px; }
+    .ic-note { margin-top: 14px; font-size: 12px; color: var(--qianse); padding-left: 12px; border-left: 2px solid var(--kuye); line-height: 1.85; }
+
+    .people-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 28px; }
+    .person-card { background: var(--card); border: 1px solid var(--bian); transition: 0.2s; cursor: pointer; overflow: hidden; border-radius: 4px; }
+    .person-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .p-img { width: 100%; aspect-ratio: 1 / 1; overflow: hidden; background: #EDE8DE; }
+    .p-img img { width: 100%; height: 100%; object-fit: cover; }
+    .p-body { padding: 18px 18px 20px; }
+    .person-card h4 { font-size: 16px; letter-spacing: 0.06em; margin-bottom: 4px; color: var(--dailan); }
+    .person-card .p-proj { font-size: 12px; color: var(--qianse); margin-bottom: 10px; }
+    .person-card .p-level { display: inline-block; font-size: 10px; letter-spacing: 0.1em; border: 1px solid var(--kuye); color: var(--kuye); padding: 1px 8px; border-radius: 20px; }
+    .p-quote { margin-top: 12px; font-size: 11.5px; color: var(--qingzhuan); line-height: 1.8; font-style: italic; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+    .map-section { margin-top: 28px; background: var(--card); border: 1px solid var(--bian); padding: 32px; border-radius: 4px; }
+    .map-svg-wrap { position: relative; max-width: 760px; margin: 0 auto; }
+    .map-svg-wrap svg { width: 100%; height: auto; display: block; }
+    .map-point { cursor: pointer; transition: 0.2s; }
+    .map-point circle { transition: 0.2s; }
+    .map-point:hover circle { r: 9; }
+    .map-point.checked circle { fill: var(--kuye); }
+    .map-point text { font-size: 9px; fill: var(--qingzhuan); pointer-events: none; }
+    .map-point.checked text { fill: var(--dailan); font-weight: 600; }
+    .checkin-status { display: flex; align-items: center; justify-content: space-between; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--bian); flex-wrap: wrap; gap: 14px; }
+    .checkin-count { font-size: 13px; color: var(--qingzhuan); }
+    .checkin-count strong { color: var(--kuye); font-size: 20px; font-weight: 600; }
+    .btn { display: inline-block; padding: 9px 24px; font-size: 12.5px; letter-spacing: 0.1em; border: 1px solid var(--kuye); background: transparent; color: var(--kuye); transition: 0.2s; border-radius: 2px; }
+    .btn:hover { background: var(--kuye); color: #fff; }
+    .btn.solid { background: var(--kuye); color: #fff; }
+    .btn.solid:hover { background: #B8995C; }
+
+    .guestbook-wrap { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .gb-form { background: var(--card); border: 1px solid var(--bian); padding: 30px; border-radius: 4px; }
+    .gb-form label { font-size: 11.5px; letter-spacing: 0.12em; color: var(--qianse); display: block; margin-bottom: 8px; }
+    .gb-form input, .gb-form textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--bian); font-family: inherit; font-size: 13.5px; color: var(--shense); background: var(--nuanbai); outline: none; margin-bottom: 18px; border-radius: 2px; }
+    .gb-form textarea { min-height: 100px; resize: vertical; }
+    .gb-form input:focus, .gb-form textarea:focus { border-color: var(--kuye); }
+    .gb-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+    .gb-tags span { font-size: 11px; padding: 3px 12px; border: 1px solid var(--bian); color: var(--qianse); cursor: pointer; border-radius: 20px; transition: 0.2s; }
+    .gb-tags span:hover, .gb-tags span.on { border-color: var(--kuye); color: var(--kuye); }
+    .gb-list { display: flex; flex-direction: column; gap: 14px; max-height: 480px; overflow-y: auto; padding-right: 6px; }
+    .gb-item { background: var(--card); border: 1px solid var(--bian); padding: 18px 20px; border-radius: 4px; }
+    .gb-item .gb-head { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .gb-item .gb-name { font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: var(--dailan); }
+    .gb-item .gb-time { font-size: 10.5px; color: var(--qianse); }
+    .gb-item .gb-text { font-size: 13px; color: var(--qingzhuan); line-height: 1.8; }
+    .gb-item .gb-tag-line { margin-top: 8px; font-size: 10px; color: var(--kuye); letter-spacing: 0.08em; }
+
+    .quiz-wrap { max-width: 720px; margin: 28px auto 0; }
+    .quiz-card { background: var(--card); border: 1px solid var(--bian); padding: 36px 36px 30px; box-shadow: var(--shadow); border-radius: 4px; }
+    .quiz-progress { font-size: 11px; letter-spacing: 0.18em; color: var(--qianse); margin-bottom: 22px; }
+    .quiz-q { font-size: 17px; letter-spacing: 0.04em; line-height: 1.8; margin-bottom: 24px; font-weight: 600; color: var(--dailan); }
+    .quiz-opts { display: flex; flex-direction: column; gap: 10px; }
+    .quiz-opt { padding: 12px 18px; border: 1px solid var(--bian); background: var(--nuanbai); font-size: 13.5px; text-align: left; letter-spacing: 0.03em; transition: 0.2s; border-radius: 2px; color: var(--shense); font-family: inherit; }
+    .quiz-opt:hover { border-color: var(--kuye); }
+    .quiz-opt.right { border-color: #7A9E6B; background: #F2F6EE; }
+    .quiz-opt.wrong { border-color: #C0857A; background: #FAF2F0; }
+    .quiz-feedback { margin-top: 18px; font-size: 12.5px; color: var(--qingzhuan); line-height: 1.8; display: none; }
+    .quiz-feedback.show { display: block; }
+    .quiz-nav { margin-top: 24px; display: flex; justify-content: space-between; align-items: center; }
+    .quiz-score { font-size: 13px; color: var(--qianse); }
+    
+    .quiz-result { display: none; text-align: center; padding: 20px 0; }
+    .quiz-result.show { display: block; animation: fade 0.5s ease; }
+    .qr-score { font-size: 46px; color: var(--kuye); font-weight: 600; line-height: 1.2; margin-bottom: 10px; }
+    .qr-score span { font-size: 18px; color: var(--qianse); font-weight: normal; }
+    .qr-rate { font-size: 16px; color: var(--dailan); margin-bottom: 24px; letter-spacing: 0.1em; }
+    .qr-msg { font-size: 14px; color: var(--qingzhuan); line-height: 2; margin-bottom: 30px; padding: 0 20px; }
+
+    .search-result-info { padding: 36px 0 10px; font-size: 13px; color: var(--qianse); }
+    .search-result-info strong { color: var(--dailan); }
+    .sr-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px; }
+    .sr-item { background: var(--card); border: 1px solid var(--bian); padding: 22px 24px; cursor: pointer; transition: 0.2s; border-radius: 4px; }
+    .sr-item:hover { border-color: var(--kuye); box-shadow: var(--shadow); }
+    .sr-item h4 { font-size: 16px; margin-bottom: 6px; letter-spacing: 0.05em; color: var(--dailan); }
+    .sr-item p { font-size: 12.5px; color: var(--qianse); }
+    .sr-item mark { background: rgba(200,169,110,0.35); color: inherit; padding: 0 1px; }
+
+    .overlay { position: fixed; inset: 0; background: rgba(44,62,80,0.4); backdrop-filter: blur(4px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px; }
+    .overlay.show { display: flex; }
+    .overlay-inner { background: var(--nuanbai); max-width: 560px; width: 100%; padding: 40px 40px 36px; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.15); max-height: 80vh; overflow-y: auto; border: 1px solid var(--bian); border-radius: 4px; }
+    .overlay-close { position: absolute; top: 14px; right: 18px; background: none; border: none; font-size: 22px; color: var(--qianse); line-height: 1; cursor: pointer; }
+    .overlay-close:hover { color: var(--dailan); }
+
+    .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--dailan); color: var(--nuanbai); padding: 10px 26px; font-size: 12.5px; letter-spacing: 0.08em; border-radius: 2px; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 300; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .footer { border-top: 1px solid var(--bian); padding: 40px 28px 48px; text-align: center; background: rgba(250,247,240,0.8); }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer p { font-size: 11.5px; color: var(--qianse); line-height: 2; letter-spacing: 0.06em; }
+    .footer .f-brand { font-size: 15px; letter-spacing: 0.2em; color: var(--qingzhuan); margin-bottom: 10px; }
+
+    @media (max-width: 900px) {
+      .header-inner { flex-wrap: wrap; gap: 12px; }
+      .nav { order: 3; width: 100%; overflow-x: auto; }
+      .search-wrap { margin-left: 0; }
+      .entry-grid { grid-template-columns: repeat(2, 1fr); }
+      .item-grid { grid-template-columns: 1fr; }
+      .people-grid { grid-template-columns: repeat(2, 1fr); }
+      .guestbook-wrap { grid-template-columns: 1fr; }
+      .sr-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .main { padding: 0 16px 70px; }
+      .header-inner { padding: 12px 16px; }
+      .entry-grid { grid-template-columns: 1fr; }
+      .people-grid { grid-template-columns: 1fr; }
+      .hero { padding: 80px 0 60px; }
+      .ic-body { padding: 20px 18px; }
+      .quiz-card { padding: 24px 20px; }
+      .overlay-inner { padding: 30px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-name">侨乡拾遗</span>
+      <span class="brand-sub">JIANGMEN · INTANGIBLE HERITAGE</span>
+    </div>
+    <nav class="nav" id="mainNav">
+      <button data-view="home" class="active">首页</button>
+      <button data-view="craft">匠心</button>
+      <button data-view="folk">民俗</button>
+      <button data-view="martial">武舞</button>
+      <button data-view="flavor">风物</button>
+      <button data-view="people">传承人</button>
+      <button data-view="map">打卡</button>
+      <button data-view="quiz">问答</button>
+      <button data-view="guestbook">手记</button>
+    </nav>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="搜索非遗项目、技艺、地名…" autocomplete="off">
+      <div class="hot-tags" id="hotTags">
+        <span data-kw="葵扇">葵扇</span>
+        <span data-kw="茅龙笔">茅龙笔</span>
+        <span data-kw="飘色">飘色</span>
+        <span data-kw="陈皮">陈皮</span>
+        <span data-kw="灰雕">灰雕</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main" id="app">
+
+  <section class="view active" id="view-home">
+    <div class="hero">
+      <div class="hero-quote">侨乡的味道，<br>一半在风里，一半在<em>手上</em>。</div>
+      <div class="hero-sub">江门五邑 · 非物质文化遗产 · 拾遗录</div>
+      <div class="hero-line"></div>
+    </div>
+    <div class="entry-grid">
+      <div class="entry-card" data-go="craft">
+        <div class="ec-mark">✂</div>
+        <h3>匠心 · 制作技艺</h3>
+        <p>葵艺、茅龙笔、陈皮、灰雕、宫灯、裹粽。一道工序一道时间。</p>
+      </div>
+      <div class="entry-card" data-go="folk">
+        <div class="ec-mark">◎</div>
+        <h3>民俗 · 侨乡记忆</h3>
+        <p>飘色凌空，碉楼下的家糍与舞狮。民俗是集体记忆。</p>
+      </div>
+      <div class="entry-card" data-go="martial">
+        <div class="ec-mark">⚘</div>
+        <h3>武舞 · 侨乡气血</h3>
+        <p>蔡李佛拳出京梅，荷塘纱龙夜不灭。武与舞，都是身体里的侨乡。</p>
+      </div>
+      <div class="entry-card" data-go="flavor">
+        <div class="ec-mark">◈</div>
+        <h3>风物 · 侨乡滋味</h3>
+        <p>古井烧鹅、恩平烧饼、外海面。味觉是最固执的乡愁。</p>
+      </div>
+      <div class="entry-card" data-go="people">
+        <div class="ec-mark">❦</div>
+        <h3>传承人 · 守艺的人</h3>
+        <p>一个人和一双手的时间。点击卡片，看见守艺心语。</p>
+      </div>
+      <div class="entry-card" data-go="map">
+        <div class="ec-mark">✧</div>
+        <h3>打卡 · 行旅帖</h3>
+        <p>点击地图上的点位，查看项目并打卡，留下你的非遗足迹。</p>
+      </div>
+      <div class="entry-card" data-go="quiz">
+        <div class="ec-mark">✎</div>
+        <h3>问答 · 侨乡十问</h3>
+        <p>五道题，从网站内容里出。答完看看你对侨乡文化了解多少。</p>
+      </div>
+      <div class="entry-card" data-go="guestbook">
+        <div class="ec-mark">✉</div>
+        <h3>手记 · 侨乡留言</h3>
+        <p>留下一个名字，和一句关于侨乡的话。记录你与江门的故事。</p>
+      </div>
+    </div>
+    <div class="home-note">
+      <strong>关于这个网站</strong>　这里的非遗不是名录里静止的条目，而是还在被人用手做着、用脚走着、用嘴讲着的东西。制作技艺给步骤，民俗传说给场景，传承人给面孔。你可以搜索、打卡、答题，也可以只是慢慢看。
+    </div>
+  </section>
+
+  <section class="view" id="view-craft">
+    <div class="section-head">
+      <div class="sh-label">Craft · 手工与时间</div>
+      <h2>匠心 · 制作技艺</h2>
+      <p>从一片葵叶、一根茅草、一块果皮开始。工序不是步骤清单，是手与材料之间的对话方式。</p>
+    </div>
+    <div class="item-grid" id="craftGrid"></div>
+  </section>
+
+  <section class="view" id="view-folk">
+    <div class="section-head">
+      <div class="sh-label">Folk · 节庆与传说</div>
+      <h2>民俗 · 侨乡记忆</h2>
+      <p>飘色在空中，家糍在手里。民俗是一个地方集体记住时间的方式。</p>
+    </div>
+    <div class="item-grid" id="folkGrid"></div>
+  </section>
+
+  <section class="view" id="view-martial">
+    <div class="section-head">
+      <div class="sh-label">Body · 拳与龙</div>
+      <h2>武舞 · 侨乡气血</h2>
+      <p>蔡李佛拳从京梅村走向七十多个国家，荷塘纱龙在夜里让一条龙通体透亮。侨乡的身体，从不安静。</p>
+    </div>
+    <div class="item-grid" id="martialGrid"></div>
+  </section>
+
+  <section class="view" id="view-flavor">
+    <div class="section-head">
+      <div class="sh-label">Taste · 味觉记忆</div>
+      <h2>风物 · 侨乡滋味</h2>
+      <p>烧鹅的皮、烧饼的馅、面的筋道。侨乡的味道，是离乡的人最先想起的东西。</p>
+    </div>
+    <div class="item-grid" id="flavorGrid"></div>
+  </section>
+
+  <section class="view" id="view-people">
+    <div class="section-head">
+      <div class="sh-label">Hands · 守艺的人</div>
+      <h2>传承人</h2>
+      <p>一个人和一双手的时间。点击卡片，看见守艺心语。</p>
+    </div>
+    <div class="people-grid" id="peopleGrid"></div>
+  </section>
+
+  <section class="view" id="view-map">
+    <div class="section-head">
+      <div class="sh-label">Walk · 行旅帖</div>
+      <h2>非遗打卡 · 江门手绘地图</h2>
+      <p>点击地图上的点位，查看项目并打卡。集满 5 项，生成一张可保存的“侨乡拾遗·行旅帖”。</p>
+    </div>
+    <div class="map-section">
+      <div class="map-svg-wrap">
+        <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg">
+          <path d="M95 170 Q120 100 210 80 Q290 62 350 92 Q400 110 440 95 Q510 75 540 130 Q565 180 530 230 Q510 268 460 285 Q410 310 350 330 Q280 352 200 330 Q130 312 100 260 Q80 220 95 170Z"
+                fill="#F0EBE1" stroke="#D5CBB8" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.9"/>
+          <text x="160" y="150" font-size="10" fill="#B5A892">鹤山</text>
+          <text x="255" y="120" font-size="10" fill="#B5A892">蓬江</text>
+          <text x="305" y="175" font-size="10" fill="#B5A892">江海</text>
+          <text x="235" y="215" font-size="10" fill="#B5A892">新会</text>
+          <text x="190" y="300" font-size="10" fill="#B5A892">台山</text>
+          <text x="330" y="265" font-size="10" fill="#B5A892">开平</text>
+          <text x="435" y="205" font-size="10" fill="#B5A892">恩平</text>
+          <g id="mapPoints"></g>
+        </svg>
+      </div>
+      <div class="checkin-status">
+        <div class="checkin-count">已打卡 <strong id="checkinCount">0</strong> / <span id="checkinTotal">9</span> 项</div>
+        <button class="btn" id="resetCheckin">重置打卡</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-quiz">
+    <div class="section-head">
+      <div class="sh-label">Quiz · 侨乡问答</div>
+      <h2>知识小问答</h2>
+      <p>五道题，从网站内容里出。答完可以回到条目里找答案。</p>
+    </div>
+    <div class="quiz-wrap">
+      <div class="quiz-card" id="quizCard">
+        <div id="quizActiveArea">
+          <div class="quiz-progress" id="quizProgress"></div>
+          <div class="quiz-q" id="quizQuestion"></div>
+          <div class="quiz-opts" id="quizOptions"></div>
+          <div class="quiz-feedback" id="quizFeedback"></div>
+          <div class="quiz-nav">
+            <span class="quiz-score" id="quizScore"></span>
+            <button class="btn solid" id="quizNext" style="display:none;">下一题</button>
+          </div>
+        </div>
+        <div class="quiz-result" id="quizResult">
+          <div class="qr-score" id="qrScore">0<span> / 5</span></div>
+          <div class="qr-rate" id="qrRate">正确率 0%</div>
+          <div class="qr-msg" id="qrMsg"></div>
+          <button class="btn solid" id="quizRestart" style="width:100%;">再来一轮</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-guestbook">
+    <div class="section-head">
+      <div class="sh-label">Notes · 侨乡手记</div>
+      <h2>留言 · 侨乡手记</h2>
+      <p>留下一个名字，和一句关于侨乡的话。</p>
+    </div>
+    <div class="guestbook-wrap">
+      <div class="gb-form">
+        <label>你的名字（或昵称）</label>
+        <input type="text" id="gbName" placeholder="怎么称呼你？" maxlength="20">
+        <label>留下的话</label>
+        <textarea id="gbText" placeholder="你与江门非遗的故事，或只是一句感受…" maxlength="300"></textarea>
+        <label>选一个标签</label>
+        <div class="gb-tags" id="gbTags">
+          <span data-tag="我来自江门">我来自江门</span>
+          <span data-tag="我去过碉楼">我去过碉楼</span>
+          <span data-tag="我家里也有葵扇">我家里也有葵扇</span>
+          <span data-tag="第一次知道茅龙笔">第一次知道茅龙笔</span>
+        </div>
+        <button class="btn solid" id="gbSubmit" style="width:100%;">写下</button>
+      </div>
+      <div class="gb-list" id="gbList"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-search">
+    <div class="search-result-info" id="searchResultInfo"></div>
+    <div class="sr-grid" id="searchResultGrid"></div>
+  </section>
+
+</main>
+
+<div class="overlay" id="overlay">
+  <div class="overlay-inner" id="overlayInner"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="f-brand">侨乡拾遗</div>
+    <p>内容参考：江门市文化广电旅游体育局、江门市文化馆、江门市非遗保护中心公开资料。</p>
+    <p>本站为文化科普用途 · 图片版权归原作者及出品方所有</p>
+  </div>
+</footer>
+
+<script>
+const $ = (s, p = document) => p.querySelector(s);
+const $$ = (s, p = document) => [...p.querySelectorAll(s)];
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function showToast(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+const DATA = {
+  craft: [
+    {
+      id: "kuiyi", name: "新会葵艺", level: "国家级 · 2008", cat: "制作技艺",
+      img: "images/kuiyi.jpg",
+      desc: "新会盛产蒲葵，素有“葵乡”美誉。从东晋起已开始种植葵树、进行葵艺加工。《广东新语》、道光《新会县志》记载“考此扇兴于晋时”。一把葵扇从采葵到成品，要经过剪、晒、焙、削、漂染、合、编织、勾花或嵌花、印花、绣花等近二十道工序。烙画葵扇（火画扇）是中国四大名扇之一，以铁笔在葵扇上烙出画意。",
+      steps: ["采葵", "晒葵", "焙扇", "削扇", "剪扇", "合扇", "绘花/烙画"],
+      note: "2024年度传承活动评估中，国家级传承人廖惠林的传承工作被评为优秀。"
+    },
+    {
+      id: "maolong", name: "白沙茅龙笔", level: "国家级 · 2008", cat: "制作技艺",
+      img: "images/maolong.jpg",
+      desc: "明代岭南大儒陈白沙以圭峰山茅草创制，五百余年传承。选草、裁剪、锤砸、浸泡、刮青、削峰、上胶、晒干、装饰，近十道纯手工工序。笔锋富有弹性，笔触苍涩，宜作行草，亦可用于山水勾勒。",
+      steps: ["选草", "裁剪", "锤砸", "浸泡", "刮青", "削峰", "上胶", "晒干"],
+      note: "国家级传承人张瑞亨经过四十余年积累，能熟练制作短锋、长锋排笔等多种类型，并编写了《茅龙笔十八道工序图解》。"
+    },
+    {
+      id: "chenpi", name: "新会陈皮炮制技艺", level: "国家级 · 2021", cat: "制作技艺",
+      img: "images/chenpi.jpg",
+      desc: "新会陈皮炮制技艺是将新会柑经开皮、晒制、陈化等程序，精心制成“新会陈皮”的技艺，已在民间世代传承数百年。流程包含采摘、开皮、反皮、翻皮、晒制、陈化，形成“三年育苗、三年挂果、三批采收、三个品种、三瓣开皮、三年晒皮、三级分皮、三年陈化、长久贮存”的独具地方特色炮制技艺。开皮须正三瓣均匀剥开，下刀浅、慢、柔，运刀深、稳、快，收刀浅、轻、慢，留果蒂相连。",
+      steps: ["采摘", "三瓣开皮", "反皮", "翻皮", "晒制", "陈化"],
+      note: "国家级传承人陈柏忠表示，从太爷、爷爷、父亲传承至他，已历经四代。"
+    },
+    {
+      id: "dongyi", name: "东艺宫灯制作技艺", level: "省级", cat: "制作技艺",
+      img: "images/dongyi.jpg",
+      desc: "东艺宫灯始创于清朝宣统年间，承袭南宋宫廷灯艺精髓。以“一灯载万象”为核心理念，融合广作木雕、粤派玻璃画、珐琅彩绘等十二种传统技法，历经选材、雕凿、拼装、结穗等四十八道精密工序。独创“悬丝承重”结构与“四梁八柱”建筑力学系统，灯体木作误差精确至0.1毫米。画玻璃是在内壁作画，先将玻璃内壁磨砂，有利光源透出柔和光线，及方便上色，然后在玻璃上画上中国传统花鸟山水画。",
+      steps: ["备料", "开料", "出槽", "挑花", "拼件", "玻璃内壁画", "上色", "装灯结穗"],
+      note: "东艺宫灯通过120余个国家的华侨群体，构建起超1亿人的文化记忆共同体。"
+    },
+    {
+      id: "huidiao", name: "开平灰雕（灰塑）", level: "省级", cat: "制作技艺",
+      img: "images/huidiao.jpg",
+      desc: "开平灰雕起源于清代中叶、盛行于民国年间，已有近三百年的历史，首先出现在建筑讲究的礼堂、庙宇的墙上，作为寓意吉祥的装饰物。以经过特别处理的石灰作为主料，用批刀直接雕贴于墙上或檐下。制作工序繁杂，共有构思、打钉、扎骨架、批底灰、批中灰、塑形、上彩等十多道工序。材料上先制“草筋灰”作底部，再制“纸筋灰”作表层——草筋灰浸泡约二十天，打磨成浆后加入糯米粉、红糖。",
+      steps: ["构思", "打钉", "扎骨架", "批底灰", "批中灰", "塑形", "上彩"],
+      note: "代表性传承人谢健扶17岁左右涉足绘画领域，与灰塑打交道已有30年。"
+    },
+    {
+      id: "guozong", name: "恩平裹粽制作技艺", level: "市级", cat: "制作技艺",
+      img: "images/guozong.jpg",
+      desc: "已有1600多年历史，早年是山区百姓远行的便携干粮。摘叶、采扎、备米、制馅、裹扎、煲煮。馅料用糯米、五花肉、咸蛋黄、脱壳绿豆、红蓝叶，以蓢古带捆扎——蓢古是当地带刺野生植物，采摘后要去刺、削条、晒干、蒸煮，包出的粽子带着植物清香。明火久煮约六小时。",
+      steps: ["摘叶", "处理蓢古带", "备米制馅", "卷叶填馅", "蓢古带织扎", "武火文火煲煮"],
+      note: "市级传承人岑结柱民间称“粽王”，从业三十余年，能做天地粽、龙角粽、回门粽等不同造型。"
+    }
+  ],
+  folk: [
+    {
+      id: "piaose", name: "台山浮石飘色", level: "国家级 · 2008", cat: "民俗",
+      img: "images/piaose.jpg",
+      desc: "始于明末清初，在台山浮石村一带流传三百余年，清光绪十四年《浮石赵氏族谱》已有正式记载。每台飘色由两名八至十岁儿童扮成历史故事、神话传说人物，由村民用“色柜”抬着出游。站在色柜面上凌空而起的叫“上色”/“飘”，坐在色柜面上的叫“下色”/“屏”。凌空的秘密是一条精心锻造的纤细钢枝“色梗”，再经捆扎固定、戏服遮掩实现“隐身”。造型有“赵子龙拦江截斗”“嫦娥奔月”“穆桂英挂帅”“木兰从军”等。",
+      steps: [],
+      note: "每年农历三月三北帝诞，头牌、色标、罗伞、飘色、舞龙、舞狮、高跷、八音锣鼓随后，遍游全村十坊。浮石村1996年被命名为“广东省民族民间艺术之乡——飘色之乡”。"
+    },
+    {
+      id: "diaolou", name: "开平碉楼民俗", level: "世界遗产 · 2007", cat: "民俗",
+      img: "images/diaolou.jpg",
+      desc: "开平现存碉楼1833座，2007年“开平碉楼与村落”列入《世界遗产名录》，是广东省唯一的世界文化遗产。碉楼是华侨为保护家眷与财产安全而建的防御性建筑，围绕碉楼形成的民俗构成了侨乡日常的肌理。塘口镇拥有塘口家糍制作技艺、圣母游巷、仓前舞狮民俗等多项非物质文化遗产。",
+      steps: [],
+      note: "把碉楼放回“碉楼下的日常”里看：家糍、舞狮、游巷，才是世界遗产真正活着的部分。"
+    },
+    {
+      id: "tanghou", name: "塘口家糍与仓前舞狮", level: "市级 / 县级", cat: "民俗",
+      img: "images/tanghou.jpg",
+      desc: "塘口家糍是结合开平风土人情和饮食习惯做成的糍点，成为开平人家家户户逢年过节或喜庆时制作的特色美食。仓前舞狮民俗列入第六批开平市县级非物质文化遗产代表性项目。碉楼下的醒狮腾挪跳跃，是侨乡年节最直接的身体记忆。",
+      steps: [],
+      note: "一口地道风味，承载着塘口独有的侨乡烟火。"
+    }
+  ],
+  martial: [
+    {
+      id: "cailifo", name: "蔡李佛拳", level: "国家级 · 2008", cat: "武舞",
+      img: "images/cailifo.jpg",
+      desc: "新会京梅村人陈享于清道光十六年（1836年）创立，集蔡家拳、李家拳、佛家拳之长，取名“蔡李佛”以纪念三位恩师。拳路气势磅礴，刚柔相济，有“南拳北派化”之称。陈享“先训德、后授艺”，宣扬武技“进可御外侮，退则强身”。是广东最早走出国门的武术流派之一，弟子门生超过1000万人，遍布全球70多个国家和地区。",
+      steps: [],
+      note: "“饮水思源乃蔡李佛之本，锲而不舍乃蔡李佛精神。”国家级传承人陈忠杰熟习穿、挠、挂、捎、插、抛、鈒、标、顶、撞“十大技法”。"
+    },
+    {
+      id: "shatang", name: "荷塘纱龙", level: "国家级 · 2008", cat: "武舞",
+      img: "images/shatang.jpg",
+      desc: "起源于蓬江区荷塘镇篁湾村，明代篁湾举人李唐佐在草扎游龙基础上模仿四川彩龙扎成纱龙灯，传承至今七百余年。全长五十多米，以竹篾、木板做骨架，纱布做龙衣，彩色布贴作龙鳞。夜晚舞龙时龙体内装特制防风防滴蜡烛，整套舞龙表演约一个多小时，二十余种舞步，舞龙者每轮26人接力交替，龙舞不停、阵不乱，龙体内蜡烛始终不灭。",
+      steps: ["扎龙头", "扎龙尾", "扎龙珠", "扎龙身", "上龙布", "装防风蜡烛"],
+      note: "龙体内蜡烛为什么不会灭，本身就是一个值得追问的题目。"
+    },
+    {
+      id: "yongchun", name: "鹤山咏春", level: "省级", cat: "武舞",
+      img: "images/yongchun.jpg",
+      desc: "鹤山咏春是侨乡武术脉络中与蔡李佛拳并行的另一支。咏春拳在鹤山一带传承有序，随华侨脚步远播海外。其拳法讲究近身短打、以巧胜拙，与蔡李佛拳的舒展大方形成侨乡武术的两种身体气质。",
+      steps: [],
+      note: "“五邑拾遗”系列宣传片中有《鹤山咏春》专集，可观看拳法演示与传承人访问。"
+    },
+    {
+      id: "liyue", name: "礼乐龙舟", level: "省级", cat: "武舞",
+      img: "images/liyue.jpg",
+      desc: "礼乐龙舟是江门地区端午竞渡传统的重要组成部分，龙舟造型与竞渡仪式均有鲜明的地域特征。龙舟下水、采青、竞渡、收龙，构成一套完整的节庆身体实践。",
+      steps: [],
+      note: "五分钟影像足以感受到水面上的侨乡气血。"
+    }
+  ],
+  flavor: [
+    {
+      id: "gujing", name: "新会古井烧鹅制作技艺", level: "省级", cat: "风物",
+      img: "images/gujing.jpg",
+      desc: "皮脆肉嫩、香气四溢的古井烧鹅，以独特烧制工艺与秘传配方，成为江门饮食文化的代表。烧鹅的皮脆，是时间和火候共同守住的底线。",
+      steps: [],
+      note: "“五邑拾遗”系列宣传片以专集呈现，探寻美食背后的传承故事。"
+    },
+    {
+      id: "enping-bing", name: "恩平烧饼与土法黑豆沙", level: "市级", cat: "风物",
+      img: "images/enping-bing.jpg",
+      desc: "恩平烧饼与土法黑豆沙保留传统油性豆沙的整套古法工序，沙质细腻、油润香甜，是恩平饼食与节庆点心的底色。市级传承人吴东梅坚守传统配方与手工流程。",
+      steps: [],
+      note: "豆沙的“沙”字，是口感，也是时间的颗粒。"
+    },
+    {
+      id: "waihai", name: "外海面", level: "传统风物", cat: "风物",
+      img: "images/waihai.jpg",
+      desc: "外海面以筋道爽滑著称，是江门街头与家常餐桌上的味觉记忆。一碗面的背后，是侨乡饮食里最朴素也最固执的日常。",
+      steps: [],
+      note: "侨乡的乡愁，有时候就是一碗面。"
+    },
+    {
+      id: "hetang-yubing", name: "荷塘煎鱼饼", level: "传统风物", cat: "风物",
+      img: "images/hetang-yubing.jpg",
+      desc: "荷塘煎鱼饼是蓬江荷塘一带的传统鱼制食品，鱼肉打胶、调味、煎制，外香内嫩。与荷塘纱龙同属一片水土长出的两种侨乡手艺：一种在夜里发光，一种在锅里作响。",
+      steps: [],
+      note: "鱼饼的香气和纱龙的烛光，都是荷塘的夜晚。"
+    }
+  ]
+};
+
+const FALLBACK_SVG = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400"><rect width="640" height="400" fill="#EDE8DE"/><text x="320" y="200" font-family="serif" font-size="16" fill="#8C8478" text-anchor="middle">图片加载中或未找到</text></svg>`
+);
+
+function imgTag(src, alt) {
+  return `<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_SVG}';">`;
+}
+
+const PEOPLE = [
+  { name: "张瑞亨", proj: "白沙茅龙笔制作技艺", level: "国家级", quote: "四十余年积累，能熟练制作短锋、长锋排笔等多种类型，编写《茅龙笔十八道工序图解》。", img: "images/zhangruiheng.jpg" },
+  { name: "廖惠林", proj: "新会葵艺", level: "国家级", quote: "从事葵艺四十多年，恢复失传技艺，培养葵艺人才。2024年度传承活动评估优秀。", img: "images/liaohuilin.jpg" },
+  { name: "陈忠杰", proj: "蔡李佛拳", level: "国家级", quote: "熟习穿、挠、挂、捎、插、抛、鈒、标、顶、撞“十大技法”，掌握“五轮马”“五轮槌”等基础套路。", img: "images/chenzhongjie.jpg" },
+  { name: "陈柏忠", proj: "新会陈皮炮制技艺", level: "国家级", quote: "从太爷、爷爷、父亲传承至他，已历经四代。自8岁起就跟陈皮睡在一起，通过长辈口口相传学习炮制技艺。", img: "images/chenbaizhong.jpg" },
+  { name: "谢健扶", proj: "开平灰塑", level: "省级", quote: "17岁左右涉足绘画领域，与灰塑打交道已有30年。无论是构思设计、动手制作，还是上色，都已驾轻就熟。", img: "images/xiejianfu.jpg" },
+  { name: "李仰东", proj: "东艺宫灯制作技艺", level: "市级", quote: "十余载坚守与创新，让宫灯在海内外熠熠生辉。做工精美的宫灯起码要30、40道工序，要精益求精。", img: "images/liyangdong.jpg" },
+  { name: "赵汝潜", proj: "台山浮石飘色", level: "省级", quote: "1944年生，浮石村人。从事飘色近六十年，参与设计制作《嫦娥奔月》《穆桂英挂帅》等十余个色架。2024年度评估优秀。", img: "images/zhaoruqian.jpg" },
+  { name: "岑结柱", proj: "恩平裹粽制作技艺", level: "市级", quote: "民间称“粽王”，从业三十余年，能做天地粽、龙角粽、回门粽等不同造型。", img: "images/cenjiezhu.jpg" }
+];
+
+const MAP_POINTS = [
+  { name: "新会葵艺", x: 250, y: 200, proj: "kuiyi" },
+  { name: "茅龙笔", x: 285, y: 225, proj: "maolong" },
+  { name: "新会陈皮", x: 225, y: 238, proj: "chenpi" },
+  { name: "台山飘色", x: 200, y: 295, proj: "piaose" },
+  { name: "开平碉楼民俗", x: 340, y: 268, proj: "diaolou" },
+  { name: "恩平裹粽", x: 440, y: 200, proj: "guozong" },
+  { name: "荷塘纱龙", x: 270, y: 118, proj: "shatang" },
+  { name: "东艺宫灯", x: 310, y: 132, proj: "dongyi" },
+  { name: "蔡李佛拳", x: 235, y: 185, proj: "cailifo" }
+];
+
+const QUIZ = [
+  { q: "台山浮石飘色中，凌空而起的儿童称为什么？", opts: ["色仔", "上色 / 飘", "色梗", "屏"], ans: 1, exp: "站在色柜面上凌空而起的叫“上色”/“飘”，坐在色柜面上的叫“下色”/“屏”。" },
+  { q: "白沙茅龙笔的发明者是谁？", opts: ["陈享", "陈白沙", "梁启超", "冯如"], ans: 1, exp: "明代岭南大儒陈白沙（陈献章）以圭峰山茅草创制。" },
+  { q: "新会陈皮炮制中，最考验手上功夫的步骤是？", opts: ["采摘", "三瓣开皮", "晒制", "陈化"], ans: 1, exp: "开皮须正三瓣均匀剥开，下刀浅、慢、柔，运刀深、稳、快，留果蒂相连。" },
+  { q: "荷塘纱龙夜晚舞龙时，龙体内装的是什么？", opts: ["灯泡", "防风防滴蜡烛", "荧光棒", "油灯"], ans: 1, exp: "龙体内装特制防风防滴蜡烛，舞龙一个多小时蜡烛始终不灭。" },
+  { q: "蔡李佛拳创立于哪一年？", opts: ["1836年", "1840年", "1900年", "1911年"], ans: 0, exp: "清道光十六年（1836年），陈享在新会京梅村创立蔡李佛拳。" },
+  { q: "开平灰雕中，“纸筋灰”里加入的两种特殊材料是？", opts: ["糯米粉和红糖", "盐和醋", "蛋清和蜂蜜", "米酒和茶油"], ans: 0, exp: "草筋灰浸泡约二十天后打磨成浆，加入糯米粉、红糖混合。" },
+  { q: "恩平裹粽用来捆扎的“蓢古带”是什么？", opts: ["竹篾", "带刺野生植物处理的扎带", "棉绳", "蕉叶"], ans: 1, exp: "蓢古是当地带刺野生植物，去刺、削条、晒干、蒸煮后用来扎粽。" },
+  { q: "开平碉楼与村落列入《世界遗产名录》是在哪一年？", opts: ["2001年", "2007年", "2010年", "2015年"], ans: 1, exp: "2007年，“开平碉楼与村落”列入《世界遗产名录》，是广东唯一的世界文化遗产。" },
+  { q: "东艺宫灯的玻璃画是在玻璃的哪一面作画？", opts: ["外壁", "内壁", "夹层里", "两面都画"], ans: 1, exp: "先将玻璃内壁磨砂，让光源透出柔和光线，再在内壁画上花鸟山水。" },
+  { q: "开平灰雕的“纸筋灰”需要浸泡打磨多久？", opts: ["三天", "一周", "约二十天", "半年"], ans: 2, exp: "草筋灰浸泡约二十天，打磨成浆后加入糯米粉、红糖。" },
+  { q: "蔡李佛拳的名字来源于几位师傅？", opts: ["一位", "两位", "三位", "四位"], ans: 2, exp: "集蔡家拳、李家拳、佛家拳之长，取名“蔡李佛”以纪念三位恩师。" },
+  { q: "新会陈皮“三瓣开皮”中，收刀的要求是什么？", opts: ["深、准、狠", "浅、轻、慢", "快、平、齐", "重、稳、快"], ans: 1, exp: "下刀浅、慢、柔；运刀深、稳、快；收刀浅、轻、慢。" },
+  { q: "礼乐龙舟的竞渡传统通常在什么节日？", opts: ["春节", "清明", "端午", "中秋"], ans: 2, exp: "礼乐龙舟是江门地区端午竞渡传统的重要组成部分。" },
+  { q: "塘口家糍是哪里的传统特色美食？", opts: ["台山", "开平", "恩平", "鹤山"], ans: 1, exp: "塘口家糍是开平人家家户户逢年过节或喜庆时制作的特色美食。" },
+  { q: "开平灰雕的代表性传承人是谁？", opts: ["谢健扶", "陈柏忠", "李仰东", "赵汝潜"], ans: 0, exp: "谢健扶是开平灰塑的代表性传承人，17岁左右涉足绘画领域，与灰塑打交道已有30年。" }
+];
+
+const VIEWS = ["home", "craft", "folk", "martial", "flavor", "people", "map", "quiz", "guestbook", "search"];
+
+function go(view) {
+  VIEWS.forEach(v => { const el = $("#view-" + v); if (el) el.classList.toggle("active", v === view); });
+  $$("#mainNav button").forEach(b => b.classList.toggle("active", b.dataset.view === view));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+$("#mainNav").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-view]");
+  if (btn) go(btn.dataset.view);
+});
+
+$$(".entry-card").forEach(card => {
+  card.addEventListener("click", () => go(card.dataset.go));
+});
+
+function renderItems(key, containerId) {
+  const grid = $("#" + containerId);
+  if (!grid) return;
+  grid.innerHTML = DATA[key].map(item => `
+    <article class="item-card" data-id="${item.id}">
+      <div class="ic-img">
+        ${imgTag(item.img, item.name)}
+      </div>
+      <div class="ic-body">
+        <div class="ic-meta">
+          ${item.level ? `<span class="ic-tag level">${esc(item.level)}</span>` : ""}
+          <span class="ic-tag">${esc(item.cat || "")}</span>
+        </div>
+        <h3>${esc(item.name)}</h3>
+        <p class="ic-desc">${esc(item.desc)}</p>
+        ${item.steps && item.steps.length ? `
+          <div class="steps">
+            <div class="steps-title">工 序</div>
+            <div class="step-list">${item.steps.map(s => `<span>${esc(s)}</span>`).join("")}</div>
+          </div>` : ""}
+        ${item.note ? `<div class="ic-note">${esc(item.note)}</div>` : ""}
+      </div>
+    </article>
+  `).join("");
+}
+
+renderItems("craft", "craftGrid");
+renderItems("folk", "folkGrid");
+renderItems("martial", "martialGrid");
+renderItems("flavor", "flavorGrid");
+
+$("#peopleGrid").innerHTML = PEOPLE.map(p => `
+  <div class="person-card" data-person='${esc(JSON.stringify(p))}'>
+    <div class="p-img">
+      ${imgTag(p.img, p.name)}
+    </div>
+    <div class="p-body">
+      <h4>${esc(p.name)}</h4>
+      <div class="p-proj">${esc(p.proj)}</div>
+      <span class="p-level">${esc(p.level)}</span>
+      <div class="p-quote">“${esc(p.quote)}”</div>
+    </div>
+  </div>
+`).join("");
+
+$("#peopleGrid").addEventListener("click", e => {
+  const card = e.target.closest(".person-card");
+  if (!card) return;
+  const p = JSON.parse(card.dataset.person);
+  openOverlay(`
+    <div style="width:100%;aspect-ratio:16/10;overflow:hidden;background:#EDE8DE;margin-bottom:22px;border-radius:4px;">
+      ${imgTag(p.img, p.name)}
+    </div>
+    <h3 style="font-size:22px;letter-spacing:.1em;margin-bottom:6px;color:var(--dailan);">${esc(p.name)}</h3>
+    <div style="font-size:13px;color:var(--qianse);margin-bottom:18px;">${esc(p.proj)} · ${esc(p.level)}</div>
+    <div style="font-size:14px;line-height:2;color:var(--qingzhuan);border-top:1px solid var(--bian);padding-top:18px;">${esc(p.quote)}</div>
+  `);
+});
+
+const STORAGE_KEY = "qiaoxiang_checkins";
+let checked = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
+
+function renderMap() {
+  const g = $("#mapPoints");
+  g.innerHTML = MAP_POINTS.map((p, i) => `
+    <g class="map-point ${checked.has(p.proj) ? "checked" : ""}" data-proj="${p.proj}" data-i="${i}">
+      <circle cx="${p.x}" cy="${p.y}" r="7" fill="${checked.has(p.proj) ? "#C8A96E" : "#FFFFFF"}" stroke="#C8A96E" stroke-width="1.5"/>
+      <text x="${p.x + 12}" y="${p.y + 3}">${esc(p.name)}</text>
+    </g>
+  `).join("");
+  $("#checkinCount").textContent = checked.size;
+  $("#checkinTotal").textContent = MAP_POINTS.length;
+}
+
+renderMap();
+
+$("#mapPoints").addEventListener("click", e => {
+  const point = e.target.closest(".map-point");
+  if (!point) return;
+  const projId = point.dataset.proj;
+  const allItems = [...DATA.craft, ...DATA.folk, ...DATA.martial, ...DATA.flavor];
+  const item = allItems.find(x => x.id === projId);
+  if (!item) return;
+  const isChecked = checked.has(projId);
+  openOverlay(`
+    <div style="width:100%;aspect-ratio:16/10;overflow:hidden;background:#EDE8DE;margin-bottom:18px;border-radius:4px;">
+      ${imgTag(item.img, item.name)}
+    </div>
+    <div class="ic-meta" style="margin-bottom:10px;">
+      <span class="ic-tag level">${esc(item.level)}</span>
+      <span class="ic-tag">${esc(item.cat)}</span>
+    </div>
+    <h3 style="font-size:21px;margin-bottom:12px;color:var(--dailan);">${esc(item.name)}</h3>
+    <p style="font-size:13.5px;line-height:1.95;color:var(--qingzhuan);">${esc(item.desc)}</p>
+    <div style="margin-top:22px;">
+      <button class="btn solid" id="doCheckin" ${isChecked ? "disabled style='opacity:.55;cursor:default;'" : ""}>
+        ${isChecked ? "已打卡 ✓" : "打卡这项非遗"}
+      </button>
+    </div>
+  `);
+  if (!isChecked) {
+    $("#doCheckin").addEventListener("click", () => {
+      checked.add(projId);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([...checked]));
+      renderMap();
+      closeOverlay();
+      showToast("已打卡 · " + item.name);
+    });
+  }
+});
+
+$("#resetCheckin").addEventListener("click", () => {
+  if (checked.size === 0) return showToast("还没有打卡记录");
+  if (confirm("确定重置所有打卡记录吗？")) {
+    checked = new Set();
+    localStorage.setItem(STORAGE_KEY, "[]");
+    renderMap();
+    showToast("打卡记录已重置");
+  }
+});
+
+let quizPool = [], quizIndex = 0, quizScore = 0, quizAnswered = false;
+
+function startQuiz() {
+  quizPool = [...QUIZ].sort(() => Math.random() - 0.5).slice(0, 5);
+  quizIndex = 0; 
+  quizScore = 0; 
+  quizAnswered = false;
+  
+  $("#quizActiveArea").style.display = "block";
+  $("#quizResult").classList.remove("show");
+  renderQuiz();
+}
+
+function renderQuiz() {
+  quizAnswered = false;
+  const q = quizPool[quizIndex];
+  $("#quizProgress").textContent = `第 ${quizIndex + 1} / ${quizPool.length} 题`;
+  $("#quizQuestion").textContent = q.q;
+  $("#quizFeedback").classList.remove("show");
+  $("#quizFeedback").textContent = "";
+  $("#quizNext").style.display = "none";
+  $("#quizScore").textContent = quizIndex > 0 ? `当前得分 ${quizScore}` : "";
+  $("#quizOptions").innerHTML = q.opts.map((o, i) =>
+    `<button class="quiz-opt" data-opt="${i}">${esc(o)}</button>`
+  ).join("");
+}
+
+$("#quizOptions").addEventListener("click", e => {
+  const btn = e.target.closest(".quiz-opt");
+  if (!btn || quizAnswered) return;
+  quizAnswered = true;
+  const q = quizPool[quizIndex];
+  const chosen = +btn.dataset.opt;
+  
+  $$("#quizOptions .quiz-opt").forEach((b, i) => {
+    if (i === q.ans) b.classList.add("right");
+    if (i === chosen && chosen !== q.ans) b.classList.add("wrong");
+    b.style.pointerEvents = "none";
+  });
+  
+  if (chosen === q.ans) quizScore++;
+  
+  const fb = $("#quizFeedback");
+  fb.textContent = (chosen === q.ans ? "答对了。" : "答案是：") + q.exp;
+  fb.classList.add("show");
+  $("#quizScore").textContent = `当前得分 ${quizScore}`;
+
+  if (quizIndex < quizPool.length - 1) {
+    $("#quizNext").style.display = "inline-block";
+  } else {
+    $("#quizNext").textContent = "查看结果";
+    $("#quizNext").style.display = "inline-block";
+  }
+});
+
+$("#quizNext").addEventListener("click", () => {
+  if (quizIndex < quizPool.length - 1) {
+    quizIndex++; 
+    renderQuiz();
+    if(quizIndex < quizPool.length - 1) {
+      $("#quizNext").textContent = "下一题";
+    }
+  } else {
+    showQuizResult();
+  }
+});
+
+function showQuizResult() {
+  $("#quizActiveArea").style.display = "none";
+  $("#quizResult").classList.add("show");
+  
+  const total = quizPool.length;
+  const rate = Math.round((quizScore / total) * 100);
+  
+  $("#qrScore").innerHTML = `${quizScore}<span> / ${total}</span>`;
+  $("#qrRate").textContent = `正确率 ${rate}%`;
+  
+  let msg = "";
+  if (rate === 100) {
+    msg = "满分！你简直是侨乡文化的活字典。";
+  } else if (rate >= 80) {
+    msg = "非常优秀！看来你刚刚读得很认真，对侨乡非遗已经颇有了解。";
+  } else if (rate >= 60) {
+    msg = "不错！大部分知识都已经掌握了，再去逛逛前面的板块巩固一下吧。";
+  } else {
+    msg = "没关系，侨乡的故事很多，不妨回到前面的板块慢慢看，再回来挑战。";
+  }
+  $("#qrMsg").textContent = msg;
+}
+
+$("#quizRestart").addEventListener("click", startQuiz);
+startQuiz();
+
+const GB_KEY = "qiaoxiang_guestbook";
+let selectedTag = "";
+function loadGuestbook() {
+  const list = JSON.parse(localStorage.getItem(GB_KEY) || "[]");
+  const el = $("#gbList");
+  if (!list.length) {
+    el.innerHTML = `<div style="font-size:12.5px;color:var(--qianse);padding:20px 0;text-align:center;">还没有手记。写下第一条吧。</div>`;
+    return;
+  }
+  el.innerHTML = list.slice().reverse().map(item => `
+    <div class="gb-item">
+      <div class="gb-head">
+        <span class="gb-name">${esc(item.name)}</span>
+        <span class="gb-time">${esc(item.time)}</span>
+      </div>
+      <div class="gb-text">${esc(item.text)}</div>
+      ${item.tag ? `<div class="gb-tag-line">${esc(item.tag)}</div>` : ""}
+    </div>
+  `).join("");
+}
+loadGuestbook();
+$("#gbTags").addEventListener("click", e => {
+  const tag = e.target.closest("span[data-tag]");
+  if (!tag) return;
+  $$("#gbTags span").forEach(s => s.classList.remove("on"));
+  if (selectedTag === tag.dataset.tag) { selectedTag = ""; }
+  else { selectedTag = tag.dataset.tag; tag.classList.add("on"); }
+});
+$("#gbSubmit").addEventListener("click", () => {
+  const name = $("#gbName").value.trim();
+  const text = $("#gbText").value.trim();
+  if (!name) return showToast("留个名字吧");
+  if (!text) return showToast("写点什么再提交");
+  const list = JSON.parse(localStorage.getItem(GB_KEY) || "[]");
+  const now = new Date();
+  const time = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, "0")}.${String(now.getDate()).padStart(2, "0")}`;
+  list.push({ name, text, tag: selectedTag, time });
+  localStorage.setItem(GB_KEY, JSON.stringify(list));
+  $("#gbName").value = ""; $("#gbText").value = "";
+  selectedTag = "";
+  $$("#gbTags span").forEach(s => s.classList.remove("on"));
+  loadGuestbook();
+  showToast("手记已留下");
+});
+
+const ALL_ITEMS = [
+  ...DATA.craft.map(x => ({ ...x, section: "craft", sectionName: "匠心" })),
+  ...DATA.folk.map(x => ({ ...x, section: "folk", sectionName: "民俗" })),
+  ...DATA.martial.map(x => ({ ...x, section: "martial", sectionName: "武舞" })),
+  ...DATA.flavor.map(x => ({ ...x, section: "flavor", sectionName: "风物" })),
+  ...PEOPLE.map(x => ({ id: "person-" + x.name, name: x.name, desc: x.proj + " · " + x.quote, section: "people", sectionName: "传承人", cat: "传承人", level: x.level }))
+];
+function doSearch(kw) {
+  kw = kw.trim();
+  if (!kw) { go("home"); return; }
+  const lower = kw.toLowerCase();
+  const hits = ALL_ITEMS.filter(item => {
+    const hay = [item.name, item.desc, item.cat, item.level, item.note, item.proj, ...(item.steps || [])].join(" ").toLowerCase();
+    return hay.includes(lower);
+  });
+  go("search");
+  $("#searchResultInfo").innerHTML = `关于 “<strong>${esc(kw)}</strong>” 的结果 · 共 ${hits.length} 条`;
+  $("#searchResultGrid").innerHTML = hits.length ? hits.map(item => {
+    const hl = (s) => esc(s).replace(new RegExp(esc(kw).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), m => `<mark>${m}</mark>`);
+    return `
+      <div class="sr-item" data-go-section="${item.section}">
+        <h4>${hl(item.name)}</h4>
+        <p>${esc(item.sectionName)} · ${esc(item.cat || "")} ${item.level ? "· " + esc(item.level) : ""}</p>
+        <p style="margin-top:8px;">${hl((item.desc || "").slice(0, 90))}${(item.desc || "").length > 90 ? "…" : ""}</p>
+      </div>
+    `;
+  }).join("") : `<div style="grid-column:1/-1;padding:40px 0;text-align:center;color:var(--qianse);font-size:13px;">没有找到。试试 “葵扇”“飘色”“陈皮” 等关键词。</div>`;
+}
+$("#searchInput").addEventListener("input", e => {
+  const v = e.target.value.trim();
+  if (v.length >= 1) doSearch(v);
+  else if ($("#view-search").classList.contains("active")) go("home");
+});
+$("#searchInput").addEventListener("keydown", e => { if (e.key === "Enter") doSearch(e.target.value); });
+$("#hotTags").addEventListener("click", e => {
+  const tag = e.target.closest("span[data-kw]");
+  if (!tag) return;
+  $("#searchInput").value = tag.dataset.kw;
+  doSearch(tag.dataset.kw);
+});
+$("#searchResultGrid").addEventListener("click", e => {
+  const item = e.target.closest(".sr-item");
+  if (!item) return;
+  go(item.dataset.goSection);
+});
+
+function openOverlay(html) {
+  $("#overlayInner").innerHTML = `<button class="overlay-close" id="overlayClose">×</button>` + html;
+  $("#overlay").classList.add("show");
+  $("#overlayClose").addEventListener("click", closeOverlay);
+  $("#overlay").addEventListener("click", e => { if (e.target === $("#overlay")) closeOverlay(); });
+  document.body.style.overflow = "hidden";
+}
+function closeOverlay() {
+  $("#overlay").classList.remove("show");
+  document.body.style.overflow = "";
+}
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeOverlay(); });
+
+go("home");
+</script>
+</body>
+</html>
